@@ -65,16 +65,16 @@ func Login(c *gin.Context) {
 	}
 
 	// 验证账号信息是否在数据库
-	if user, err := service.Login(username, password); err == nil {
+	if user, err := service.Login(username, password); err != nil {
+		c.JSON(http.StatusOK, UserLoginResponse{
+			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
+		})
+	} else {
 		usersLoginInfo[token] = user
 		c.JSON(http.StatusOK, UserLoginResponse{
 			Response: service.Response{StatusCode: 0, StatusMsg: "登陆成功"},
 			UserId:   user.Id,
 			Token:    token,
-		})
-	} else {
-		c.JSON(http.StatusOK, UserLoginResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: err.Error()},
 		})
 	}
 }
@@ -91,14 +91,14 @@ func UserInfo(c *gin.Context) {
 	}
 
 	userId := c.Query("user_id")
-	if user, err := service.UserInfo(userId); err == nil {
+	if user, err := service.UserInfo(userId); err != nil {
 		c.JSON(http.StatusOK, UserResponse{
-			Response: service.Response{StatusCode: 0},
-			User:     user,
+			Response: service.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
 		})
 	} else {
 		c.JSON(http.StatusOK, UserResponse{
-			Response: service.Response{StatusCode: 1, StatusMsg: "User doesn't exist"},
+			Response: service.Response{StatusCode: 0},
+			User:     user,
 		})
 	}
 }

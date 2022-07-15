@@ -26,7 +26,7 @@ func Register(name, password string) (User, error) {
 			FollowCount:   t.FollowerCount,
 			FollowerCount: t.FollowCount,
 			IsFollow:      t.IsFollow,
-		}, err
+		}, nil
 	}
 }
 
