@@ -7,7 +7,7 @@ import (
 )
 
 type UserListResponse struct {
-	service.Response
+	Response
 	UserList []service.User `json:"user_list"`
 }
 
@@ -16,16 +16,16 @@ func RelationAction(c *gin.Context) {
 	token := c.Query("token")
 
 	if _, exist := usersLoginInfo[token]; exist {
-		c.JSON(http.StatusOK, service.Response{StatusCode: 0})
+		c.JSON(http.StatusOK, Response{StatusCode: 0})
 	} else {
-		c.JSON(http.StatusOK, service.Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
 }
 
-// FollowList all users have same follow list
+// FollowList all users have same followed list
 func FollowList(c *gin.Context) {
 	c.JSON(http.StatusOK, UserListResponse{
-		Response: service.Response{
+		Response: Response{
 			StatusCode: 0,
 		},
 		UserList: []service.User{DemoUser},
@@ -35,7 +35,7 @@ func FollowList(c *gin.Context) {
 // FollowerList all users have same follower list
 func FollowerList(c *gin.Context) {
 	c.JSON(http.StatusOK, UserListResponse{
-		Response: service.Response{
+		Response: Response{
 			StatusCode: 0,
 		},
 		UserList: []service.User{DemoUser},
