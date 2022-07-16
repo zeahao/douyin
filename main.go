@@ -1,6 +1,7 @@
 package main
 
 import (
+	"douyin/config"
 	"douyin/dal/db"
 	"douyin/router"
 	"github.com/gin-gonic/gin"
@@ -12,6 +13,7 @@ func init() {
 	url := "127.0.0.1:3306"
 	database := "douyin"
 	db.InitMysql(user, password, url, database)
+	config.InitGetURL()
 }
 
 func main() {

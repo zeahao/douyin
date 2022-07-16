@@ -1,11 +1,14 @@
 package service
 
 import (
+	"douyin/config"
 	"douyin/dal/db"
 	"douyin/model"
+	"douyin/util"
 	"sync"
 )
 
+// GetFeedList 获取视频feed流
 func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64) {
 	list, nextTime := db.GetFeedList(latestTime, userId)
 
@@ -51,7 +54,8 @@ func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64
 	return videos, nextTime
 }
 
-func GetPublish(userId int64) (videos []Video) {
+// GetPublishList 获取发布列表
+func GetPublishList(userId int64) (videos []Video) {
 	list, _ := db.GetVideoListByAuthor(userId)
 
 	var wg sync.WaitGroup
@@ -80,4 +84,18 @@ func GetPublish(userId int64) (videos []Video) {
 
 	wg.Wait()
 	return videos
+}
+
+// Publish 发布接口
+func Publish(user User, videoName string, title string) (err error) {
+	// 获取视频封面图
+	imgName := util.GetImage(videoName)
+
+	err = db.AddVideo(model.Video{
+		AuthorId: user.Id,
+		PlayUrl:  config.URL + ":8080/Video/" + videoName,
+		CoverUrl: config.URL + ":8080/Image/" + imgName + ".jpeg",
+		Title:    title,
+	})
+	return err
 }

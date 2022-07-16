@@ -4,7 +4,7 @@ import (
 	"douyin/model"
 )
 
-// 获取视频feed流
+// GetFeedList 获取视频feed流
 func GetFeedList(latestTime int64, userId int64) (videos []model.Video, nextTime int64) {
 	var t model.Video
 	nextTime = latestTime
@@ -46,6 +46,7 @@ func GetFeedList(latestTime int64, userId int64) (videos []model.Video, nextTime
 	return videos, nextTime
 }
 
+// GetVideoListByAuthor 发表列表
 func GetVideoListByAuthor(userId int64) (videos []model.Video, err error) {
 	err = db.Table("video").Where("author_id = ?", userId).Find(&videos).Error
 	if err != nil {
@@ -58,50 +59,3 @@ func AddVideo(newVideo model.Video) error {
 	err := db.Table("video").Create(&newVideo).Error
 	return err
 }
-
-//func GetVideo(videoId int64) (video tt.Video, err error) {
-//	var v model.Video
-//	err = Db.Table("video").Where("id = ?", videoId).Take(&v).Error
-//	user, _ := GetUser(v.AuthorId)
-//	video = tt.Video{
-//		Id:            v.Id,
-//		Author:        user,
-//		PlayUrl:       v.PlayUrl,
-//		CoverUrl:      v.CoverUrl,
-//		FavoriteCount: v.FavoriteCount,
-//		CommentCount:  v.CommentCount,
-//		IsFavorite:    v.IsFavorite,
-//		Title:         v.Title,
-//	}
-//	return video, err
-//}
-//
-//func UpdateFavoriteCount(videoId, favoriteCount int64) (err error) {
-//	err = Db.Table("video").Where("id=?", videoId).Update("favorite_count", favoriteCount).Error
-//	return err
-//}
-//
-//func UpdateCommentCount(videoId, commentCount int64) (err error) {
-//	err = Db.Debug().Table("video").Where("id=?", videoId).Update("comment_count", commentCount).Error
-//	return err
-//}
-//
-//func GetVideoList(videoIds []int64) (videos []tt.Video, err error) {
-//	var video []model.Video
-//	err = Db.Table("video").Where("id in ?", videoIds).Find(&video).Error
-//	videos = make([]tt.Video, 0, len(video))
-//	for _, v := range video {
-//		user, _ := GetUser(v.AuthorId)
-//		videos = append(videos, tt.Video{
-//			Id:            v.Id,
-//			Author:        user,
-//			PlayUrl:       v.PlayUrl,
-//			CoverUrl:      v.CoverUrl,
-//			FavoriteCount: v.FavoriteCount,
-//			CommentCount:  v.CommentCount,
-//			IsFavorite:    true,
-//			Title:         v.Title,
-//		})
-//	}
-//	return videos, err
-//}
