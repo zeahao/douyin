@@ -86,7 +86,7 @@ func GetPublishList(userId int64) (videos []Video) {
 	return videos
 }
 
-// Publish 发布接口
+// Publish 视频发布接口
 func Publish(user User, videoName string, title string) (err error) {
 	// 获取视频封面图
 	imgName := util.GetImage(videoName)

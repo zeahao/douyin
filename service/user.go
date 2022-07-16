@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// Register 用户注册
 func Register(name, password string) (User, error) {
 	if _, err := db.GetUserByName(name); err == nil {
 		return User{}, errors.New("账号已存在")
@@ -30,6 +31,7 @@ func Register(name, password string) (User, error) {
 	}
 }
 
+// Login 用户登录
 func Login(name, password string) (User, error) {
 	if user, err := db.GetUserByName(name); err == nil {
 		if user.Password == password {
@@ -46,6 +48,7 @@ func Login(name, password string) (User, error) {
 	return User{}, errors.New("账号不存在")
 }
 
+// UserInfo 用户信息
 func UserInfo(userId string) (User, error) {
 	id, _ := strconv.Atoi(userId)
 	user, err := db.GetUserById(int64(id))

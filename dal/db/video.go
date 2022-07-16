@@ -55,6 +55,7 @@ func GetVideoListByAuthor(userId int64) (videos []model.Video, err error) {
 	return videos, nil
 }
 
+// AddVideo 添加视频
 func AddVideo(newVideo model.Video) error {
 	err := db.Table("video").Create(&newVideo).Error
 	return err

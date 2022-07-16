@@ -4,6 +4,7 @@ import (
 	"douyin/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 )
 
 type CommentListResponse struct {
@@ -20,20 +21,34 @@ type CommentActionResponse struct {
 func CommentAction(c *gin.Context) {
 	token := c.Query("token")
 	actionType := c.Query("action_type")
-
 	if user, exist := usersLoginInfo[token]; exist {
 		if actionType == "1" {
 			text := c.Query("comment_text")
-			c.JSON(http.StatusOK, CommentActionResponse{Response: Response{StatusCode: 0},
-				Comment: service.Comment{
-					Id:         1,
-					User:       user,
-					Content:    text,
-					CreateDate: "05-01",
-				}})
+			videoId, _ := strconv.Atoi(c.Query("video_id"))
+			err := service.CommentAction(user.Id, int64(videoId), text)
+			if err != nil {
+				c.JSON(http.StatusOK, CommentActionResponse{
+					Response: Response{
+						StatusCode: 1,
+						StatusMsg:  err.Error(),
+					},
+				})
+				return
+			}
+			comment := service.GetCommentId(user.Id, int64(videoId))
+			comment.User = user
+			c.JSON(http.StatusOK, CommentActionResponse{Response: Response{StatusCode: 0, StatusMsg: "评论成功"},
+				Comment: comment})
 			return
+		} else if actionType == "2" {
+			commentId, _ := strconv.Atoi(c.Query("comment_id"))
+			err := service.DelComment(int64(commentId))
+			if err != nil {
+				c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "删除失败"})
+			} else {
+				c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "删除成功"})
+			}
 		}
-		c.JSON(http.StatusOK, Response{StatusCode: 0})
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
 	}
