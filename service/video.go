@@ -6,6 +6,7 @@ import (
 	"douyin/model"
 	"douyin/util"
 	"sync"
+	"time"
 )
 
 // GetFeedList 获取视频feed流
@@ -92,10 +93,11 @@ func Publish(user User, videoName string, title string) (err error) {
 	imgName := util.GetImage(videoName)
 
 	err = db.AddVideo(model.Video{
-		AuthorId: user.Id,
-		PlayUrl:  config.URL + ":8080/Video/" + videoName,
-		CoverUrl: config.URL + ":8080/Image/" + imgName + ".jpeg",
-		Title:    title,
+		AuthorId:   user.Id,
+		PlayUrl:    config.URL + ":8080/Video/" + videoName,
+		CoverUrl:   config.URL + ":8080/Image/" + imgName + ".jpeg",
+		Title:      title,
+		CreateTime: time.Now().UnixMilli(),
 	})
 	return err
 }
