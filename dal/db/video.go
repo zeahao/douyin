@@ -4,6 +4,7 @@ import (
 	"douyin/model"
 )
 
+// 获取视频feed流
 func GetFeedList(latestTime int64, userId int64) (videos []model.Video, nextTime int64) {
 	var t model.Video
 	nextTime = latestTime
@@ -56,12 +57,6 @@ func GetVideoListByAuthor(userId int64) (videos []model.Video, err error) {
 func AddVideo(newVideo model.Video) error {
 	err := db.Table("video").Create(&newVideo).Error
 	return err
-}
-
-func GetPublishList(userId int64) []model.Video {
-	user, _ := GetUserById(userId)
-	videos, _ := GetVideoListByAuthor(user.Id)
-	return videos
 }
 
 //func GetVideo(videoId int64) (video tt.Video, err error) {

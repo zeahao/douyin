@@ -51,10 +51,12 @@ func Publish(c *gin.Context) {
 
 // PublishList all users have same publish video list
 func PublishList(c *gin.Context) {
+	token := c.Query("token")
+	videos := service.GetPublish(usersLoginInfo[token].Id)
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: Response{
 			StatusCode: 0,
 		},
-		VideoList: DemoVideos,
+		VideoList: videos,
 	})
 }

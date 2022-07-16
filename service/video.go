@@ -50,3 +50,34 @@ func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64
 	wg.Wait()
 	return videos, nextTime
 }
+
+func GetPublish(userId int64) (videos []Video) {
+	list, _ := db.GetVideoListByAuthor(userId)
+
+	var wg sync.WaitGroup
+	for _, v := range list {
+		wg.Add(1)
+		go func(v model.Video) {
+			defer wg.Done()
+			user, _ := db.GetUserById(v.AuthorId)
+			videos = append(videos, Video{
+				Id: v.Id,
+				Author: User{
+					Id:            user.Id,
+					Name:          user.Name,
+					FollowCount:   user.FollowCount,
+					FollowerCount: user.FollowerCount,
+					IsFollow:      user.IsFollow,
+				},
+				PlayUrl:       v.PlayUrl,
+				CoverUrl:      v.CoverUrl,
+				FavoriteCount: v.FavoriteCount,
+				CommentCount:  v.CommentCount,
+				IsFavorite:    v.IsFavorite,
+			})
+		}(v)
+	}
+
+	wg.Wait()
+	return videos
+}
