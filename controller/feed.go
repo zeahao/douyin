@@ -4,7 +4,7 @@ import (
 	"douyin/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"time"
+	"strconv"
 )
 
 type FeedResponse struct {
@@ -15,9 +15,13 @@ type FeedResponse struct {
 
 // Feed same demo video list for every request
 func Feed(c *gin.Context) {
+	token := c.Query("token")
+	latestTime, _ := strconv.Atoi(c.Query("latest_time"))
+
+	videos, nextTime := service.GetFeedList(int64(latestTime), usersLoginInfo[token].Id)
 	c.JSON(http.StatusOK, FeedResponse{
-		Response:  Response{StatusCode: 0},
-		VideoList: DemoVideos,
-		NextTime:  time.Now().Unix(),
+		Response:  Response{StatusCode: 0, StatusMsg: "获取成功"},
+		VideoList: videos,
+		NextTime:  nextTime,
 	})
 }

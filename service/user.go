@@ -8,18 +8,18 @@ import (
 )
 
 func Register(name, password string) (User, error) {
-	if _, err := db.SelectUserByName(name); err == nil {
+	if _, err := db.GetUserByName(name); err == nil {
 		return User{}, errors.New("账号已存在")
 	} else {
 		newUser := model.User{
 			Name:     name,
 			Password: password,
 		}
-		err := db.InsertUser(newUser)
+		err := db.AddUser(newUser)
 		if err != nil {
 			return User{}, errors.New("注册失败")
 		}
-		t, err := db.SelectUserByName(name)
+		t, err := db.GetUserByName(name)
 		return User{
 			Id:            t.Id,
 			Name:          t.Name,
@@ -31,7 +31,7 @@ func Register(name, password string) (User, error) {
 }
 
 func Login(name, password string) (User, error) {
-	if user, err := db.SelectUserByName(name); err == nil {
+	if user, err := db.GetUserByName(name); err == nil {
 		if user.Password == password {
 			return User{
 				Id:            user.Id,
@@ -48,7 +48,7 @@ func Login(name, password string) (User, error) {
 
 func UserInfo(userId string) (User, error) {
 	id, _ := strconv.Atoi(userId)
-	user, err := db.SelectUserById(int64(id))
+	user, err := db.GetUserById(int64(id))
 
 	if err != nil {
 		return User{}, err
