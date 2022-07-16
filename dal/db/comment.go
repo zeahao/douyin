@@ -12,7 +12,7 @@ func AddComment(comment model.Comment) (err error) {
 func GetComment(userId, videoId int64) (comment model.Comment, err error) {
 	err = db.Table("comment").
 		Where("user_id = ? and video_id = ?", userId, videoId).
-		Take(&comment).Error
+		Last(&comment).Error
 	if err != nil {
 		return comment, err
 	}
@@ -20,7 +20,17 @@ func GetComment(userId, videoId int64) (comment model.Comment, err error) {
 }
 
 // DelComment 删除评论
-func DelComment(commentId int64) (err error) {
-	err = db.Table("comment").Where("id=?", commentId).Delete(&model.Comment{}).Error
-	return err
+func DelComment(commentId int64) {
+	db.Table("comment").Where("id=?", commentId).Delete(&model.Comment{})
+}
+
+// GetCommentList 查询评论列表
+func GetCommentList(videoId int64) (comments []model.Comment, err error) {
+	err = db.Table("comment").
+		Where("video_id = ?", videoId).
+		Find(&comments).Error
+	if err != nil {
+		return comments, err
+	}
+	return comments, nil
 }

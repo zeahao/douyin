@@ -42,12 +42,8 @@ func CommentAction(c *gin.Context) {
 			return
 		} else if actionType == "2" {
 			commentId, _ := strconv.Atoi(c.Query("comment_id"))
-			err := service.DelComment(int64(commentId))
-			if err != nil {
-				c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "删除失败"})
-			} else {
-				c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "删除成功"})
-			}
+			service.DelComment(int64(commentId))
+			c.JSON(http.StatusOK, Response{StatusCode: 0, StatusMsg: "删除成功"})
 		}
 	} else {
 		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
@@ -56,8 +52,11 @@ func CommentAction(c *gin.Context) {
 
 // CommentList all videos have same demo comment list
 func CommentList(c *gin.Context) {
+	videoId, _ := strconv.Atoi(c.Query("video_id"))
+	comments := service.GetCommentList(int64(videoId))
+
 	c.JSON(http.StatusOK, CommentListResponse{
 		Response:    Response{StatusCode: 0},
-		CommentList: DemoComments,
+		CommentList: comments,
 	})
 }

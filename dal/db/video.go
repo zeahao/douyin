@@ -55,6 +55,24 @@ func GetVideoListByAuthor(userId int64) (videos []model.Video, err error) {
 	return videos, nil
 }
 
+// GetVideoById 获取视频
+func GetVideoById(videoId int64) (video model.Video, err error) {
+	err = db.Table("video").Where("id = ?", videoId).Take(&video).Error
+	if err != nil {
+		return video, err
+	}
+	return video, nil
+}
+
+// UpdateVideo 修改视频数据
+func UpdateVideo(video model.Video) (err error) {
+	err = db.Table("video").Save(&video).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // AddVideo 添加视频
 func AddVideo(newVideo model.Video) error {
 	err := db.Table("video").Create(&newVideo).Error
