@@ -82,7 +82,6 @@ func GetPublishList(userId int64) (videos []Video) {
 			})
 		}(v)
 	}
-
 	wg.Wait()
 	return videos
 }

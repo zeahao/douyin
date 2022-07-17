@@ -38,10 +38,13 @@ func FavoriteAction(c *gin.Context) {
 
 // FavoriteList all users have same favorite video list
 func FavoriteList(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+	videos := service.GetFavoriteList(int64(userId))
 	c.JSON(http.StatusOK, VideoListResponse{
 		Response: Response{
 			StatusCode: 0,
+			StatusMsg:  "查询成功",
 		},
-		VideoList: DemoVideos,
+		VideoList: videos,
 	})
 }

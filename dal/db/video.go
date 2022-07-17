@@ -74,3 +74,12 @@ func AddVideo(newVideo model.Video) error {
 	err := db.Table("video").Create(&newVideo).Error
 	return err
 }
+
+// GetVideoListById 批量查找视频
+func GetVideoListById(videoId []int64) (videos []model.Video, err error) {
+	err = db.Table("video").Where("id in ?", videoId).Find(&videos).Error
+	if err != nil {
+		return videos, err
+	}
+	return videos, nil
+}
