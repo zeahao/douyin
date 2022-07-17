@@ -19,3 +19,11 @@ func GetFavoriteVideoIdList(userId int64) (videoIdList []int64) {
 	db.Table("favorite").Where("user_id=?", userId).Select("video_id").Find(&videoIdList)
 	return videoIdList
 }
+
+func IsFavorite(userId, videoId int64) bool {
+	err := db.Table("favorite").Where("user_id = ? and video_id = ?", userId, videoId).Error
+	if err != nil {
+		return false
+	}
+	return true
+}

@@ -12,7 +12,9 @@ func GetFeedList(latestTime int64, userId int64) (videos []model.Video, nextTime
 		Find(&videos).Error
 
 	// 更新时间戳
-	nextTime = videos[len(videos)-1].CreateTime
+	if len(videos) > 0 {
+		nextTime = videos[len(videos)-1].CreateTime
+	}
 
 	//var wg sync.WaitGroup
 	//for _, v := range videos {

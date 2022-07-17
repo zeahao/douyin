@@ -8,34 +8,27 @@ import (
 
 // FavoriteAction 视频点赞
 func FavoriteAction(userId, videoId int64) {
-	_ = db.AddFavorite(model.Favorite{
+	err := db.AddFavorite(model.Favorite{
 		UserId:  userId,
 		VideoId: videoId,
 	})
-	video, err := db.GetVideoById(videoId)
 	if err != nil {
 		return
 	}
+	video, _ := db.GetVideoById(videoId)
 	video.FavoriteCount++
-	err = db.UpdateVideo(video)
-	if err != nil {
-		return
-	}
-
+	_ = db.UpdateVideo(video)
 }
 
 // DelFavorite 取消点赞
 func DelFavorite(userId, videoId int64) {
-	_ = db.DelFavorite(userId, videoId)
-	video, err := db.GetVideoById(videoId)
+	err := db.DelFavorite(userId, videoId)
 	if err != nil {
 		return
 	}
+	video, _ := db.GetVideoById(videoId)
 	video.FavoriteCount--
-	err = db.UpdateVideo(video)
-	if err != nil {
-		return
-	}
+	_ = db.UpdateVideo(video)
 }
 
 // GetFavoriteList 获取点赞视频列表

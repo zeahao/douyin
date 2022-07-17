@@ -5,6 +5,7 @@ import (
 	"douyin/dal/db"
 	"douyin/model"
 	"douyin/util"
+	"fmt"
 	"sync"
 	"time"
 )
@@ -19,21 +20,10 @@ func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64
 		go func(v model.Video) {
 			defer wg.Done()
 			user, _ := db.GetUserById(v.AuthorId)
-			//此视频是否已被点赞(好像多余了)
-			//favorite := 0
-			//db.Debug().Table("favorite").Select("user_id").Where("user_id=? and video_id=?", userId, v.Id).Take(&favorite)
-			//if favorite > 0 {
-			//	v.IsFavorite = true
-			//} else {
-			//	v.IsFavorite = false
-			//}
-			//follow := 0
-			//db.Debug().Table("relation").Select("user_id").Where("user_id=? and to_user_id=?", userId, v.AuthorId).Take(&follow)
-			//if follow > 0 || userId == user.Id {
-			//	user.IsFollow = true
-			//} else {
-			//	user.IsFollow = false
-			//}
+
+			// 判断当前用户是否已对视频点赞
+			isFavorite := db.IsFavorite(userId, v.Id)
+			fmt.Println(isFavorite)
 			videos = append(videos, Video{
 				Id: v.Id,
 				Author: User{
@@ -41,7 +31,7 @@ func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64
 					Name:          user.Name,
 					FollowCount:   user.FollowCount,
 					FollowerCount: user.FollowerCount,
-					IsFollow:      user.IsFollow,
+					IsFollow:      isFavorite,
 				},
 				PlayUrl:       v.PlayUrl,
 				CoverUrl:      v.CoverUrl,

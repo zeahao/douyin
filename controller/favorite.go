@@ -12,7 +12,7 @@ func FavoriteAction(c *gin.Context) {
 	token := c.Query("token")
 	actionType := c.Query("action_type")
 	if _, exist := usersLoginInfo[token]; exist {
-		userId, _ := strconv.Atoi(c.Query("user_id"))
+		userId := usersLoginInfo[token].Id
 		videoId, _ := strconv.Atoi(c.Query("video_id"))
 		if actionType == "1" {
 			service.FavoriteAction(int64(userId), int64(videoId))
