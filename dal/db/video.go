@@ -6,17 +6,13 @@ import (
 
 // GetFeedList 获取视频feed流
 func GetFeedList(latestTime int64, userId int64) (videos []model.Video, nextTime int64) {
-	var t model.Video
 	nextTime = latestTime
-	for i := 0; i < 30; i++ {
-		err := db.Table("video").Where("create_time<?", nextTime).Last(&t).Error
-		if err != nil {
-			break
-		}
-		videos = append(videos, t)
-		//获取本次缓存视频时间戳
-		nextTime = t.CreateTime
-	}
+	_ = db.Table("video").Where("create_time<?", nextTime).
+		Limit(30).Order("create_time desc").
+		Find(&videos).Error
+
+	// 更新时间戳
+	nextTime = videos[len(videos)-1].CreateTime
 
 	//var wg sync.WaitGroup
 	//for _, v := range videos {
