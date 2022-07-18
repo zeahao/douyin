@@ -41,10 +41,7 @@ func UpdateUser(user model.User) (err error) {
 }
 
 // GetUserList 批量查询
-func GetUserList(id []int64) (users []model.User, err error) {
-	err = db.Table("user").Where("id in ?", id).Find(&users).Error
-	if err != nil {
-		return users, err
-	}
-	return users, nil
+func GetUserList(id []int64) (users []model.User) {
+	db.Table("user").Where("id in ?", id).Find(&users)
+	return users
 }

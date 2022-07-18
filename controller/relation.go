@@ -55,20 +55,26 @@ func RelationAction(c *gin.Context) {
 
 // FollowList all users have same followed list
 func FollowList(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+	users := service.GetFollowList(int64(userId))
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{
 			StatusCode: 0,
+			StatusMsg:  "获取成功",
 		},
-		UserList: []service.User{DemoUser},
+		UserList: users,
 	})
 }
 
 // FollowerList all users have same follower list
 func FollowerList(c *gin.Context) {
+	userId, _ := strconv.Atoi(c.Query("user_id"))
+	users := service.GetFollowerList(int64(userId))
 	c.JSON(http.StatusOK, UserListResponse{
 		Response: Response{
 			StatusCode: 0,
+			StatusMsg:  "获取成功",
 		},
-		UserList: []service.User{DemoUser},
+		UserList: users,
 	})
 }

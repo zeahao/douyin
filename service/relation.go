@@ -3,6 +3,7 @@ package service
 import (
 	"douyin/dal/db"
 	"douyin/model"
+	"sync"
 )
 
 // RelationAction 关注操作
@@ -41,4 +42,50 @@ func DelRelation(userId, toUserId int64) {
 	user.FollowerCount--
 	_ = db.UpdateUser(user)
 	return
+}
+
+// GetFollowerList 获取用户粉丝列表
+func GetFollowerList(userId int64) (users []User) {
+	idList := db.GetUserIdList(userId)
+	u := db.GetUserList(idList)
+	wg := sync.WaitGroup{}
+	for _, user := range u {
+		wg.Add(1)
+		go func(user model.User) {
+			defer wg.Done()
+			users = append(users, User{
+				Id:            user.Id,
+				Name:          user.Name,
+				FollowCount:   user.FollowCount,
+				FollowerCount: user.FollowerCount,
+				IsFollow:      user.IsFollow,
+			})
+		}(user)
+	}
+	wg.Wait()
+
+	return users
+}
+
+// GetFollowList 获取用户关注列表
+func GetFollowList(userId int64) (users []User) {
+	idList := db.GetToUserIdList(userId)
+	u := db.GetUserList(idList)
+	wg := sync.WaitGroup{}
+	for _, user := range u {
+		wg.Add(1)
+		go func(user model.User) {
+			defer wg.Done()
+			users = append(users, User{
+				Id:            user.Id,
+				Name:          user.Name,
+				FollowCount:   user.FollowCount,
+				FollowerCount: user.FollowerCount,
+				IsFollow:      user.IsFollow,
+			})
+		}(user)
+	}
+	wg.Wait()
+
+	return users
 }

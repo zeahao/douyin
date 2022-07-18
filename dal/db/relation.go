@@ -13,3 +13,17 @@ func DelRelation(relation model.Relation) (cnt int64) {
 	db.Table("relation").Where("user_id=? and to_user_id=?", relation.UserId, relation.ToUserId).Count(&cnt).Delete(&relation)
 	return cnt
 }
+
+// GetToUserIdList 获取关注列表
+func GetToUserIdList(userId int64) (toUserIdList []int64) {
+	db.Table("relation").Where("user_id=?", userId).
+		Select("to_user_id").Find(&toUserIdList)
+	return toUserIdList
+}
+
+// GetUserIdList 获取粉丝列表
+func GetUserIdList(userId int64) (toUserIdList []int64) {
+	db.Table("relation").Where("to_user_id=?", userId).
+		Select("user_id").Find(&toUserIdList)
+	return toUserIdList
+}
