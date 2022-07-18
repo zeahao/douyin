@@ -33,14 +33,7 @@ func RelationAction(c *gin.Context) {
 				StatusMsg:  "关注成功",
 			})
 		} else if actionType == "2" {
-			err := service.DelRelation(int64(userId), int64(toUserId))
-			if err != nil {
-				c.JSON(http.StatusOK, Response{
-					StatusCode: 1,
-					StatusMsg:  err.Error(),
-				})
-				return
-			}
+			service.DelRelation(int64(userId), int64(toUserId))
 			c.JSON(http.StatusOK, Response{
 				StatusCode: 0,
 				StatusMsg:  "取消关注成功",
@@ -53,7 +46,10 @@ func RelationAction(c *gin.Context) {
 		}
 
 	} else {
-		c.JSON(http.StatusOK, Response{StatusCode: 1, StatusMsg: "User doesn't exist"})
+		c.JSON(http.StatusOK, Response{
+			StatusCode: 1,
+			StatusMsg:  "User doesn't exist",
+		})
 	}
 }
 

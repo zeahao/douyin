@@ -25,14 +25,13 @@ func RelationAction(userId, toUserId int64) (err error) {
 }
 
 // DelRelation 删除关注
-func DelRelation(userId, toUserId int64) (err error) {
-	err = db.DelRelation(model.Relation{
+func DelRelation(userId, toUserId int64) {
+	cnt := db.DelRelation(model.Relation{
 		UserId:   userId,
 		ToUserId: toUserId,
 	})
-
-	if err != nil {
-		return err
+	if cnt == 0 {
+		return
 	}
 	user, _ := db.GetUserById(userId)
 	user.FollowCount--
@@ -41,5 +40,5 @@ func DelRelation(userId, toUserId int64) (err error) {
 	user, _ = db.GetUserById(toUserId)
 	user.FollowerCount--
 	_ = db.UpdateUser(user)
-	return nil
+	return
 }

@@ -29,7 +29,6 @@ func GetCommentId(userId, videoId int64) (comment Comment) {
 // DelComment 删除评论
 func DelComment(commentId int64) {
 	db.DelComment(commentId)
-
 }
 
 // GetCommentList 获取评论列表

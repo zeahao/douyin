@@ -9,9 +9,9 @@ func AddFavorite(favorite model.Favorite) (err error) {
 }
 
 // DelFavorite 删除点赞
-func DelFavorite(userId, videoId int64) (err error) {
-	err = db.Table("favorite").Where("user_id=? and video_id = ?", userId, videoId).Delete(&model.Favorite{}).Error
-	return err
+func DelFavorite(userId, videoId int64) (cnt int64) {
+	db.Table("favorite").Where("user_id=? and video_id = ?", userId, videoId).Count(&cnt).Delete(&model.Favorite{})
+	return cnt
 }
 
 // GetFavoriteVideoIdList 批量获取点赞视频id

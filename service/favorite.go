@@ -22,8 +22,8 @@ func FavoriteAction(userId, videoId int64) {
 
 // DelFavorite 取消点赞
 func DelFavorite(userId, videoId int64) {
-	err := db.DelFavorite(userId, videoId)
-	if err != nil {
+	cnt := db.DelFavorite(userId, videoId)
+	if cnt == 0 {
 		return
 	}
 	video, _ := db.GetVideoById(videoId)
