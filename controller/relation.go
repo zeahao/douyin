@@ -17,7 +17,7 @@ func RelationAction(c *gin.Context) {
 	token := c.Query("token")
 	if _, exist := usersLoginInfo[token]; exist {
 		actionType := c.Query("action_type")
-		userId, _ := strconv.Atoi(c.Query("user_id"))
+		userId := usersLoginInfo[token].Id
 		toUserId, _ := strconv.Atoi(c.Query("to_user_id"))
 		if actionType == "1" {
 			err := service.RelationAction(int64(userId), int64(toUserId))

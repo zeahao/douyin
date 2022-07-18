@@ -52,7 +52,6 @@ func Login(name, password string) (User, error) {
 func UserInfo(userId string) (User, error) {
 	id, _ := strconv.Atoi(userId)
 	user, err := db.GetUserById(int64(id))
-
 	if err != nil {
 		return User{}, err
 	} else {

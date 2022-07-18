@@ -9,14 +9,11 @@ func AddComment(comment model.Comment) (err error) {
 }
 
 // GetComment 查询评论
-func GetComment(userId, videoId int64) (comment model.Comment, err error) {
-	err = db.Table("comment").
+func GetComment(userId, videoId int64) (comment model.Comment) {
+	db.Table("comment").
 		Where("user_id = ? and video_id = ?", userId, videoId).
-		Last(&comment).Error
-	if err != nil {
-		return comment, err
-	}
-	return comment, nil
+		Last(&comment)
+	return comment
 }
 
 // DelComment 删除评论
@@ -25,12 +22,9 @@ func DelComment(commentId int64) {
 }
 
 // GetCommentList 查询评论列表
-func GetCommentList(videoId int64) (comments []model.Comment, err error) {
-	err = db.Table("comment").
+func GetCommentList(videoId int64) (comments []model.Comment) {
+	db.Table("comment").
 		Where("video_id = ?", videoId).
-		Find(&comments).Error
-	if err != nil {
-		return comments, err
-	}
-	return comments, nil
+		Find(&comments)
+	return comments
 }

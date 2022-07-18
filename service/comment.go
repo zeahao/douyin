@@ -20,7 +20,7 @@ func CommentAction(userId int64, videoId int64, content string) (err error) {
 
 // GetCommentId 查询评论
 func GetCommentId(userId, videoId int64) (comment Comment) {
-	t, _ := db.GetComment(userId, videoId)
+	t := db.GetComment(userId, videoId)
 	comment.Id = t.Id
 	comment.CreateDate = t.CreateDate
 	return comment
@@ -33,10 +33,10 @@ func DelComment(commentId int64) {
 
 // GetCommentList 获取评论列表
 func GetCommentList(videoId int64) (comments []Comment) {
-	t, _ := db.GetCommentList(videoId)
+	t := db.GetCommentList(videoId)
 
 	// 更新视频评论数
-	video, _ := db.GetVideoById(videoId)
+	video := db.GetVideoById(videoId)
 	video.CommentCount = int64(len(t))
 	_ = db.UpdateVideo(video)
 

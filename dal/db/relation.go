@@ -27,3 +27,12 @@ func GetUserIdList(userId int64) (toUserIdList []int64) {
 		Select("user_id").Find(&toUserIdList)
 	return toUserIdList
 }
+
+// IsRelation 判断是否关注
+func IsRelation(userId, toUserId int64) bool {
+	err := db.Table("relation").Where("user_id=? and to_user_id=?", userId, toUserId).Error
+	if err != nil {
+		return false
+	}
+	return true
+}

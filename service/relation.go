@@ -58,7 +58,7 @@ func GetFollowerList(userId int64) (users []User) {
 				Name:          user.Name,
 				FollowCount:   user.FollowCount,
 				FollowerCount: user.FollowerCount,
-				IsFollow:      user.IsFollow,
+				IsFollow:      db.IsRelation(userId, user.Id),
 			})
 		}(user)
 	}
@@ -81,7 +81,7 @@ func GetFollowList(userId int64) (users []User) {
 				Name:          user.Name,
 				FollowCount:   user.FollowCount,
 				FollowerCount: user.FollowerCount,
-				IsFollow:      user.IsFollow,
+				IsFollow:      true,
 			})
 		}(user)
 	}

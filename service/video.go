@@ -12,7 +12,7 @@ import (
 
 // GetFeedList 获取视频feed流
 func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64) {
-	list, nextTime := db.GetFeedList(latestTime, userId)
+	list, nextTime := db.GetFeedList(latestTime)
 
 	var wg sync.WaitGroup
 	for _, v := range list {
@@ -47,7 +47,7 @@ func GetFeedList(latestTime int64, userId int64) (videos []Video, nextTime int64
 
 // GetPublishList 获取发布列表
 func GetPublishList(userId int64) (videos []Video) {
-	list, _ := db.GetVideoListByAuthor(userId)
+	list := db.GetVideoListByAuthor(userId)
 
 	var wg sync.WaitGroup
 	for _, v := range list {

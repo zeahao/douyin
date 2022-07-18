@@ -15,7 +15,7 @@ func FavoriteAction(userId, videoId int64) {
 	if err != nil {
 		return
 	}
-	video, _ := db.GetVideoById(videoId)
+	video := db.GetVideoById(videoId)
 	video.FavoriteCount++
 	_ = db.UpdateVideo(video)
 }
@@ -26,7 +26,7 @@ func DelFavorite(userId, videoId int64) {
 	if cnt == 0 {
 		return
 	}
-	video, _ := db.GetVideoById(videoId)
+	video := db.GetVideoById(videoId)
 	video.FavoriteCount--
 	_ = db.UpdateVideo(video)
 }
@@ -34,7 +34,7 @@ func DelFavorite(userId, videoId int64) {
 // GetFavoriteList 获取点赞视频列表
 func GetFavoriteList(userId int64) (videos []Video) {
 	l := db.GetFavoriteVideoIdList(userId)
-	list, _ := db.GetVideoListById(l)
+	list := db.GetVideoListById(l)
 	var wg sync.WaitGroup
 	for _, v := range list {
 		wg.Add(1)
