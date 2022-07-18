@@ -13,7 +13,7 @@ type VideoListResponse struct {
 	VideoList []service.Video `json:"video_list"`
 }
 
-// Publish check token then save upload file to public directory
+// Publish check token then save upload file to static directory
 func Publish(c *gin.Context) {
 	token := c.PostForm("token")
 	title := c.PostForm("title")
@@ -35,7 +35,7 @@ func Publish(c *gin.Context) {
 
 	user := usersLoginInfo[token]
 	videoName := fmt.Sprintf("%d_%s", user.Id, filepath.Base(data.Filename))
-	saveFile := filepath.Join("./public/video", videoName)
+	saveFile := filepath.Join("./static/video", videoName)
 	if err := c.SaveUploadedFile(data, saveFile); err != nil {
 		c.JSON(http.StatusOK, Response{
 			StatusCode: 1,
